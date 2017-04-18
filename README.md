@@ -115,7 +115,26 @@ See the deployment example located in the repo under:
 
 It contains a deployment script and an example lambda source file.
 
-To run the script you must first make it runnable (chmod +x deploy-lambda.sh)
+* Install the dependencies by running:
+```
+$ npm install
+```
+
+To run the script you must first make it runnable:
+```
+$ chmod +x deploy-lambda.sh
+```
+
+To test:
+
+* Deploy the API via API Gateway
+* Create an environment variable called __AWS\_HOST\_MARCHIO__ which is set to the invocation url
+* Test the deployment using __curl__:
+```
+$ curl -i -X POST -H "Content-Type: application/json" -d '{"email":"test@beta.com"}' $AWS_HOST_MARCHIO/test/marchio/mldb
+```
+* The response should contain a 201 status code and a copy of the created record, along with its id (eid)
+* Browse the DynamoDB table to see the new record.
 
 * * *
 
@@ -187,7 +206,11 @@ factory.create({
 
 ## Testing
 
-To test, go to the root folder and type (sans __$__):
+To test:
+
+* Deploy the example (examples/deploy) 
+
+* Go to the root folder and type (sans __$__):
 
     $ npm test
    
