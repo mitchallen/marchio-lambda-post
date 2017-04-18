@@ -34,7 +34,7 @@ var postFactory = require('./db-post');
  * @param {Object} spec.model - Table model
  * @returns {Promise} that resolves to {module:marchio-lambda-post}
  * @example <caption>Usage example</caption>
- *
+ * // Lambda root file
  * var factory = require("marchio-lambda-post");
  *
  * var model = {
@@ -42,7 +42,7 @@ var postFactory = require('./db-post');
  *    fields: {
  *        email:    { type: String, required: true },
  *        status:   { type: String, required: true, default: "NEW" },
- *        password: { type: String, select: false },  // select: false, exclude from query results
+ *        password: { type: String, select: false }
  *    }
  * };
  * 

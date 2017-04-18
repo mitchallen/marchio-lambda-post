@@ -38,7 +38,7 @@ It takes one spec parameter that must be an object with named parameters
 
 **Example** *(Usage example)*  
 ```js
-
+// Lambda root file
 var factory = require("marchio-lambda-post");
 
 var model = {
@@ -46,7 +46,7 @@ var model = {
    fields: {
        email:    { type: String, required: true },
        status:   { type: String, required: true, default: "NEW" },
-       password: { type: String, select: false },  // select: false, exclude from query results
+       password: { type: String, select: false }
    }
 };
 

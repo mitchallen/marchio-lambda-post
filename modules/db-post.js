@@ -113,7 +113,7 @@ module.exports.create = ( spec ) => {
         };
         res
             .json(resObject);
-     })
+    })
     .catch( (err) => {  
         if(err) {
             if( err === 404 ) {
