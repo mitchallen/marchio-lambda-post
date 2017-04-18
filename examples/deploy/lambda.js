@@ -9,8 +9,7 @@
 
 "use strict";
 
-// var mlFactory = require('marcio-lambda-post'); // Use once package is live
-var mlFactory = require('modules/index');   // TEMP until package is live
+var mlFactory = require('marchio-lambda-post'); 
 
 exports.handler = function(event, context, callback) {
 
