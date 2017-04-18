@@ -4,12 +4,16 @@ REST POST to DynamoDB via Lambda
 --
 
 <p align="left">
+<!--
   <a href="https://travis-ci.org/mitchallen/marchio-lambda-post">
     <img src="https://img.shields.io/travis/mitchallen/marchio-lambda-post.svg?style=flat-square" alt="Continuous Integration">
   </a>
+-->
+<!--
   <a href="https://codecov.io/gh/mitchallen/marchio-lambda-post">
     <img src="https://codecov.io/gh/mitchallen/marchio-lambda-post/branch/master/graph/badge.svg" alt="Coverage Status">
   </a>
+-->
   <a href="https://npmjs.org/package/marchio-lambda-post">
     <img src="http://img.shields.io/npm/dt/marchio-lambda-post.svg?style=flat-square" alt="Downloads">
   </a>
@@ -27,8 +31,6 @@ REST POST to DynamoDB via Lambda
     $ npm install marchio-lambda-post --save
   
 * * *
-
-## Usage
 
 ## Lambda Setup
 
