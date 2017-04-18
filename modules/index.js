@@ -8,6 +8,11 @@
 
 "use strict";
 
+require('dotenv').config();
+
+var adapterFactory = require('@mitchallen/lambda-adapter');
+var postFactory = require('./db-post');
+
 /**
  * Module
  * @module marchio-lambda-post
@@ -23,60 +28,71 @@
  * Factory method 
  * It takes one spec parameter that must be an object with named parameters
  * @param {Object} spec Named parameters object
+ * @param {Object} spec.event Lambda event
+ * @param {Object} spec.context Lambda context
+ * @param {function} spec.callback Lambda callback
+ * @param {Object} spec.model - Table model
  * @returns {Promise} that resolves to {module:marchio-lambda-post}
  * @example <caption>Usage example</caption>
-    var factory = require("marchio-lambda-post");
- 
-    factory.create({})
-    .then(function(obj) {
-        return obj.health();
-    })
-    .catch( function(err) { 
-        console.error(err); 
-    });
+ *
+ * var factory = require("marchio-lambda-post");
+ *
+ * var model = {
+ *    name: 'marchio',
+ *    fields: {
+ *        email:    { type: String, required: true },
+ *        status:   { type: String, required: true, default: "NEW" },
+ *        password: { type: String, select: false },  // select: false, exclude from query results
+ *    }
+ * };
+ * 
+ * factory.create({
+ *     event: event, 
+ *     context: context,
+ *     callback: callback,
+ *     model: model, 
+ *     post: true
+ * })
+ * .catch( function(err) { 
+ *     console.error(err); 
+ * });
  */
 module.exports.create = (spec) => {
 
-    return new Promise((resolve, reject) => {
+    spec = spec || {};
 
-        spec = spec || {};
+    if(!spec.event) {
+        return Promise.reject("event parameter not set");
+    }
 
-        // reject("reason");
+    if(!spec.context) {
+        return Promise.reject("context parameter not set");
+    }
 
-        // private 
-        let _package = "marchio-lambda-post";
+    if(!spec.context.functionName) {
+        return Promise.reject("context.functionName parameter not defined");
+    }
 
-        resolve({
-            // public
-            /** Returns the package name
-              * @function
-              * @instance
-              * @memberof module:marchio-lambda-post
-            */
-            package: () => _package,
-            /** Health check
-              * @function
-              * @instance
-              * @memberof module:marchio-lambda-post
-              * @example <caption>Usage Example</caption>
-                var factory = require("marchio-lambda-post");
-             
-                factory.create({})
-                .then(function(obj) {
-                    return obj.health();
-                })
-                .then(function(result) {
-                    console.log("HEALTH: ", result);
-                })
-                .catch( function(err) { 
-                    console.error(err); 
+    if(!spec.callback) {
+        return Promise.reject("callback parameter not set");
+    }
+
+    if(!spec.model) {
+        return Promise.reject("model parameter not set");
+    }
+
+    spec.regex = `/${spec.context.functionName}/:model/:id`;
+
+    const marchio = spec;
+
+    return  adapterFactory.create(spec)
+            .then( (adapter) => {
+                return postFactory.create({ 
+                    adapter: adapter,
+                    marchio: marchio 
                 });
-            */
-            health: function() {
-                return new Promise((resolve,reject) => {
-                    resolve("OK");
-                });
-            }
-        });
-    });
+            })
+            .catch(function(err) {
+                spec.callback(err);
+            });
 };

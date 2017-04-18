@@ -1,6 +1,6 @@
 marchio-lambda-post
 ==
-PUT DESCRIPTION HERE
+REST POST to DynamoDB via Lambda
 --
 
 <p align="left">
