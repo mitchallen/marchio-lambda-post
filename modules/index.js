@@ -35,27 +35,33 @@ var postFactory = require('./db-post');
  * @returns {Promise} that resolves to {module:marchio-lambda-post}
  * @example <caption>Usage example</caption>
  * // Lambda root file
- * var factory = require("marchio-lambda-post");
- *
- * var model = {
- *    name: 'marchio',
- *    fields: {
- *        email:    { type: String, required: true },
- *        status:   { type: String, required: true, default: "NEW" },
- *        password: { type: String, select: false }
- *    }
- * };
+ * "use strict";
  * 
- * factory.create({
- *     event: event, 
- *     context: context,
- *     callback: callback,
- *     model: model, 
- *     post: true
- * })
- * .catch( function(err) { 
- *     console.error(err); 
- * });
+ * var mlFactory = require('marcio-lambda-post'); 
+ * 
+ * exports.handler = function(event, context, callback) {
+ * 
+ *     var model = {
+ *         name: 'mldb',   // must match DynamoDB table name
+ *         primary: 'eid', // primary key - cannot be reserved word (like uuid)
+ *         fields: {
+ *             email:    { type: String, required: true },
+ *             status:   { type: String, required: true, default: "NEW" },
+ *             // In a real world example, password would be hashed by middleware before being saved
+ *             password: { type: String, select: false },  // select: false, exclude from query results
+ *         }
+ *     };
+ * 
+ *    mlFactory.create({ 
+ *         event: event, 
+ *         context: context,
+ *         callback: callback,
+ *         model: model
+ *     })
+ *     .catch(function(err) {
+ *         callback(err);
+ *     });
+ *  };
  */
 module.exports.create = (spec) => {
 

@@ -181,29 +181,36 @@ It takes one spec parameter that must be an object with named parameters
 **Example** *(Usage example)*  
 ```js
 // Lambda root file
-var factory = require("marchio-lambda-post");
+"use strict";
 
-var model = {
-   name: 'marchio',
-   fields: {
-       email:    { type: String, required: true },
-       status:   { type: String, required: true, default: "NEW" },
-       password: { type: String, select: false }
-   }
-};
+var mlFactory = require('marcio-lambda-post'); 
 
-factory.create({
-    event: event, 
-    context: context,
-    callback: callback,
-    model: model, 
-    post: true
-})
-.catch( function(err) { 
-    console.error(err); 
-});
+exports.handler = function(event, context, callback) {
+
+    var model = {
+        name: 'mldb',   // must match DynamoDB table name
+        primary: 'eid', // primary key - cannot be reserved word (like uuid)
+        fields: {
+            email:    { type: String, required: true },
+            status:   { type: String, required: true, default: "NEW" },
+            // In a real world example, password would be hashed by middleware before being saved
+            password: { type: String, select: false },  // select: false, exclude from query results
+        }
+    };
+
+   mlFactory.create({ 
+        event: event, 
+        context: context,
+        callback: callback,
+        model: model
+    })
+    .catch(function(err) {
+        callback(err);
+    });
+ };
 ```
 
+ 
 * * *
 
 ## Testing
