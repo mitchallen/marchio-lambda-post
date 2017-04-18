@@ -56,7 +56,7 @@ REST POST to DynamoDB via Lambda
 * __Step 3: Attach policy__
  * Select both __AmazonDynamoDB*__ policies
 * Click: __Next Step__
-* Create a name for the rold (like __lambda-db-test__)
+* Create a name for the role (like __lambda-db-test__)
 * Click: __Create role__
 
 #### Create Lambda Function
@@ -87,7 +87,7 @@ REST POST to DynamoDB via Lambda
 * (Optionally enabled __CORS__)
 * Click: __Create Resource__
 * For __Integration type__ select: __Lambda Function Proxy__
-* Lambda Region: __us-east-1__
+* Lambda Region: For example: __us-east-1__
 * Lambda Function: __marchio__
 * Click: __Save__
 * Add Permission to Lambda Function: __OK__
@@ -100,7 +100,7 @@ REST POST to DynamoDB via Lambda
 #### Create DynamoDB Table
 
 * Browse to: https://console.aws.amazon.com/dynamodb/
-* Click: __Create Table___
+* Click: __Create Table__
 * Table name: __mldb__
 * Primary key: __eid__
 * The type should be the default (string)
@@ -240,6 +240,10 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 * * *
 
 ## Version History
+
+#### Version 0.1.1
+
+* Fixed some doc issues
 
 #### Version 0.1.0 
 
