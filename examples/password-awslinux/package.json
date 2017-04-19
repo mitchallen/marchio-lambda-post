@@ -1,0 +1,15 @@
+{
+  "name": "password-awslinux",
+  "version": "1.0.0",
+  "description": "Password example - requires awslinux compile",
+  "main": "lambda.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mitch Allen",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "marchio-lambda-post": "^0.1.4"
+  }
+}

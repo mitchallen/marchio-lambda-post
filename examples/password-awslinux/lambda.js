@@ -9,20 +9,21 @@
 
 "use strict";
 
-const mlFactory = require('marchio-lambda-post');
+const mlFactory = require('marchio-lambda-post'),
+      bcrypt = require('bcrypt');
 
-var getRandomInt = function (min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-};
+const saltRounds = 10;
 
-/* 
- * Why not just demo hashing with bcrypt?
- * Because bcrypt requires installing on AWS Linux before packaging
- * That's beyond the scope of this example, so we fake it.
+/*
+ * *** UNTESTED ***
+ * *** EXPERIMENTAL ***
+ * *** Requires installing bcrypt on AWS Linux before uploading
+ * If you do not install bycrypt on an AWS Linux image, 
+ * before packaging for Lambda, you will get this error:
+ * "/var/task/node_modules/bcrypt/lib/binding/bcrypt_lib.node: invalid ELF header"
  */
 
-function fakeHash( record ) {
-    // Not a real hash function - do not used in production
+function hashPassword( record ) {
     return new Promise( (resolve, reject) => {
         if(!record) {
             return reject('record not defined');
@@ -30,9 +31,12 @@ function fakeHash( record ) {
         if(!record.password) {
             return reject('record.password not defined');
         }
-        // fake hashing - do not use in production
-        record.password = '$' + getRandomInt(10000, 10000000);
-        resolve(record);
+        bcrypt.genSalt(saltRounds)
+        .then( salt => bcrypt.hash( record.password, salt ) )
+        .then( hash => {
+            record.password = hash;
+            resolve(record);
+        });
     });
 }
 
@@ -54,7 +58,7 @@ exports.handler = function(event, context, callback) {
         context: context,
         callback: callback,
         model: model,
-        filter: fakeHash
+        filter: hashPassword
     })
     .catch(function(err) {
         callback(err);

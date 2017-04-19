@@ -14,6 +14,15 @@ const doc = require('dynamodb-doc'),
     crFactory = require('marchio-core-record'),
     path = '/:model';
 
+function defaultFilter( record ) {
+    return new Promise( (resolve, reject) => {
+        if(!record) {
+            return reject('record not defined');
+        }
+        resolve(record);
+    });
+}
+
 module.exports.create = ( spec ) => {
 
     spec = spec || {};
@@ -22,7 +31,7 @@ module.exports.create = ( spec ) => {
           marchio = spec.marchio;
 
     const model = marchio.model,
-          preprocess = marchio.preprocess;
+          filter = marchio.filter || defaultFilter;
 
     const query = adapter.query,
           params = adapter.params,
@@ -89,6 +98,10 @@ module.exports.create = ( spec ) => {
             return Promise.reject(404);
         }
         record[primaryKey] = dbId;
+        return filter( record );
+    })
+    .then( record => {
+        var dbId = record[primaryKey];  // save dbId before select
         var postObject = {
             "TableName": model.name,
             "ConditionExpression": `attribute_not_exists(${primaryKey})`,
@@ -97,14 +110,14 @@ module.exports.create = ( spec ) => {
         return Promise.all([
                 docClient.putItem( postObject ).promise(),
                 recMgr.select( record ),
-                Promise.resolve(dbId)
+                Promise.resolve( dbId )
             ]);
     })
     .then( (o) => {
         var data = o[0],
             record = o[1],
             dbId = o[2];
-        record[primaryKey] = dbId; // Set againg AFTER select or id will be filtered out
+        record[primaryKey] = dbId; // Set again AFTER select or id will be filtered out
         var resObject = {
             statusCode: 201,  
             headers: {
