@@ -22,7 +22,7 @@ var getRandomInt = function (min, max) {
  */
 
 function fakeHash( record ) {
-    // Not a real hash function - do not used in production
+    // Not a real hash function - do not use in production
     return new Promise( (resolve, reject) => {
         if(!record) {
             return reject('record not defined');
