@@ -37,8 +37,7 @@ module.exports.create = ( spec ) => {
 
     var recMgr = null,
         idMgr = null,
-        eMsg = '',
-        dbId = null;
+        eMsg = '';
 
     var req = {
         method: method,
@@ -84,8 +83,8 @@ module.exports.create = ( spec ) => {
         ]);
     })
     .then( o => {
-        var record = o[0];
-        dbId = o[1];
+        var record = o[0],
+            dbId = o[1];
         if( ! record ) {    // record failed validation
             return Promise.reject(404);
         }
@@ -97,12 +96,14 @@ module.exports.create = ( spec ) => {
         };
         return Promise.all([
                 docClient.putItem( postObject ).promise(),
-                recMgr.select( record )
+                recMgr.select( record ),
+                Promise.resolve(dbId)
             ]);
     })
     .then( (o) => {
         var data = o[0],
-            record = o[1];
+            record = o[1],
+            dbId = o[2];
         record[primaryKey] = dbId; // Set againg AFTER select or id will be filtered out
         var resObject = {
             statusCode: 201,  
