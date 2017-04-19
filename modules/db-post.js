@@ -38,8 +38,7 @@ module.exports.create = ( spec ) => {
     var recMgr = null,
         idMgr = null,
         eMsg = '',
-        dbId = null,
-        record = null;
+        dbId = null;
 
     var req = {
         method: method,
@@ -85,7 +84,7 @@ module.exports.create = ( spec ) => {
         ]);
     })
     .then( o => {
-        record = o[0];
+        var record = o[0];
         dbId = o[1];
         if( ! record ) {    // record failed validation
             return Promise.reject(404);
@@ -96,13 +95,15 @@ module.exports.create = ( spec ) => {
             "ConditionExpression": `attribute_not_exists(${primaryKey})`,
             "Item": record
         };
-        return docClient.putItem( postObject ).promise();
+        return Promise.all([
+                docClient.putItem( postObject ).promise(),
+                recMgr.select( record )
+            ]);
     })
-    .then( (data) => {
-        return recMgr.select( record );
-    })
-    .then( (record) => {
-        record[primaryKey] = dbId; // Call AFTER select or id will be filtered out
+    .then( (o) => {
+        var data = o[0],
+            record = o[1];
+        record[primaryKey] = dbId; // Set againg AFTER select or id will be filtered out
         var resObject = {
             statusCode: 201,  
             headers: {
@@ -125,7 +126,6 @@ module.exports.create = ( spec ) => {
                     statusCode: 500,
                     body: { 
                         message: err.message, 
-                        record: record,
                         err: err
                     }
                 });
