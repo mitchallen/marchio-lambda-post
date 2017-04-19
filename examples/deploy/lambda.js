@@ -20,7 +20,7 @@ exports.handler = function(event, context, callback) {
             email:    { type: String, required: true },
             status:   { type: String, required: true, default: "NEW" },
             // In a real world example, password would be hashed by middleware before being saved
-            password: { type: String, select: false },  // select: false, exclude from query results
+            password: { type: String, select: false }  // select: false, exclude from query results
         }
     };
 
