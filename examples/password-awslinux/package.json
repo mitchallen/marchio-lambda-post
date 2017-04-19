@@ -10,6 +10,6 @@
   "license": "MIT",
   "dependencies": {
     "bcrypt": "^1.0.2",
-    "marchio-lambda-post": "^0.1.4"
+    "marchio-lambda-post": "^0.1.6"
   }
 }
