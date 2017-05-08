@@ -3,7 +3,7 @@
 # chmod +x (this script)
 
 KIT_FOLDER=temp-kit
-FUNC=marchio-patch
+FUNC=marchio
 REGION=us-east-1
 ZIP_FILE=pkg-lambda.zip
 
