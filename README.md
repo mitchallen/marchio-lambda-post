@@ -213,7 +213,8 @@ exports.handler = function(event, context, callback) {
 
     var model = {
         name: 'mldb',   // must match DynamoDB table name
-        primary: 'eid', // primary key - cannot be reserved word (like uuid)
+        partition: 'eid', // primary partition key - cannot be reserved word (like uuid)
+        // sort: 'gid', 
         fields: {
             email:    { type: String, required: true },
             status:   { type: String, required: true, default: "NEW" },
@@ -264,6 +265,10 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 * * *
 
 ## Version History
+
+#### Version 0.2.0
+
+* changed model.primary to model.partition
 
 #### Version 0.1.6
 

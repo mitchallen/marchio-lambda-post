@@ -40,7 +40,8 @@ module.exports.create = ( spec ) => {
           res = adapter.response,
           env = adapter.env;
 
-    const primaryKey = model.primary,
+    const partition = model.partition || null,
+          sort = model.sort || null,
           jsonp = query.jsonp || false,
           cb = query.cb || 'callback';
 
@@ -74,16 +75,17 @@ module.exports.create = ( spec ) => {
         return;
     }
 
-    // TODO - check primaryKey against DynamoDB reserved words
-    if(!primaryKey) {
-        throw new Error('dp-post: model.primary not defined.');
-    }
-
     return Promise.all([
         crFactory.create( { model: model } ),
         uuidFactory.create()
     ]).
     then( o => {
+        if(model.primary) {
+            throw new Error( "ERROR: marchio-lambda-post: model.primary should now be model.partition" );
+        }
+        if(!partition) {
+            throw new Error( "ERROR: marchio-lambda-post: model.partition not defined" );
+        }
         recMgr = o[0];  
         idMgr  = o[1];
         return Promise.all([
@@ -97,14 +99,14 @@ module.exports.create = ( spec ) => {
         if( ! record ) {    // record failed validation
             return Promise.reject(404);
         }
-        record[primaryKey] = dbId;
+        record[partition] = dbId;
         return filter( record );
     })
     .then( record => {
-        var dbId = record[primaryKey];  // save dbId before select
+        var dbId = record[partition];  // save dbId before select
         var postObject = {
             "TableName": model.name,
-            "ConditionExpression": `attribute_not_exists(${primaryKey})`,
+            "ConditionExpression": `attribute_not_exists(${partition})`,
             "Item": record
         };
         return Promise.all([
@@ -117,7 +119,7 @@ module.exports.create = ( spec ) => {
         var data = o[0],
             record = o[1],
             dbId = o[2];
-        record[primaryKey] = dbId; // Set again AFTER select or id will be filtered out
+        record[partition] = dbId; // Set again AFTER select or id will be filtered out
         var resObject = {
             statusCode: 201,  
             headers: {
@@ -138,6 +140,13 @@ module.exports.create = ( spec ) => {
             } else {
                 res.json({
                     statusCode: 500,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-marchio-error": err.message,
+                        "x-marchio-table": model.name,
+                        "x-marchio-partition": params.partition,
+                        "x-marchio-sort": params.sort
+                    },
                     body: { 
                         message: err.message, 
                         err: err
