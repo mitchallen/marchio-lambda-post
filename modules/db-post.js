@@ -11,8 +11,7 @@
 const doc = require('dynamodb-doc'),
     docClient = doc ? new doc.DynamoDB() : null,
     uuidFactory = require('marchio-id-uuid'),
-    crFactory = require('marchio-core-record'),
-    path = '/:model';
+    crFactory = require('marchio-core-record');
 
 function defaultFilter( record ) {
     return new Promise( (resolve, reject) => {

@@ -5,7 +5,7 @@
   "main": "lambda.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "demo": "curl -i -X POST -H \"Content-Type: application/json\" -d '{\"gid\":\"G123\",\"email\":\"sort@delta.com\",\"password\":\"Password!\"}' $AWS_HOST_MARCHIO_SORT/test/marchio-sort/mldb-sort"
+    "demo": "curl -i -X POST -H \"Content-Type: application/json\" -d '{\"gid\":\"G123\",\"email\":\"sort@delta.com\",\"password\":\"Password!\"}' $AWS_HOST_MARCHIO_SORT/test/marchio-sort"
   },
   "author": "Mitch Allen",
   "license": "MIT",

@@ -133,7 +133,7 @@ To test:
 * Create an environment variable called __AWS\_HOST\_MARCHIO__ which is set to the invocation url
 * Test the deployment using __curl__:
 ```
-$ curl -i -X POST -H "Content-Type: application/json" -d '{"email":"test@beta.com"}' $AWS_HOST_MARCHIO/test/marchio/mldb
+$ curl -i -X POST -H "Content-Type: application/json" -d '{"email":"test@beta.com"}' $AWS_HOST_MARCHIO/test/marchio
 ```
 * The response should contain a 201 status code and a copy of the created record, along with its id (eid)
 * Browse the DynamoDB table to see the new record.
@@ -266,6 +266,11 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 * * *
 
 ## Version History
+
+#### Version 0.3.0
+
+* removed model/table name from url
+* updated example url's
 
 #### Version 0.2.2
 
