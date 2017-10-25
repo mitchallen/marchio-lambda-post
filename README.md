@@ -214,7 +214,7 @@ exports.handler = function(event, context, callback) {
     var model = {
         name: 'mldb',   // must match DynamoDB table name
         partition: 'eid', // primary partition key - cannot be reserved word (like uuid)
-        // sort: 'gid', 
+        // sort: 'gid', // primary sort key
         fields: {
             email:    { type: String, required: true },
             status:   { type: String, required: true, default: "NEW" },
@@ -235,6 +235,7 @@ exports.handler = function(event, context, callback) {
     });
  };
 ```
+
  
 * * *
 
@@ -265,6 +266,10 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 * * *
 
 ## Version History
+
+#### Version 0.2.2
+
+* added support for sort key (model.sort) - see examples
 
 #### Version 0.2.1
 

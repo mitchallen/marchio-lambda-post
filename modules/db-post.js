@@ -67,7 +67,7 @@ module.exports.create = ( spec ) => {
             headers: {
                 "Content-Type": "application/json",
                 "x-marchio-http-method": method,
-                "x-marchio-error": "HTTP Method not supported"
+                "x-marchio-error": "HTTP Method not supported (marchio-lambda-post)"
             },
             body: {} 
         };

@@ -1,0 +1,15 @@
+{
+  "name": "deploy-101",
+  "version": "1.0.0",
+  "description": "Example Lambda deployment",
+  "main": "lambda.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "demo": "curl -i -X POST -H \"Content-Type: application/json\" -d '{\"gid\":\"G123\",\"email\":\"sort@delta.com\",\"password\":\"Password!\"}' $AWS_HOST_MARCHIO_SORT/test/marchio-sort/mldb-sort"
+  },
+  "author": "Mitch Allen",
+  "license": "MIT",
+  "dependencies": {
+    "marchio-lambda-post": "file:marchio-kit.tgz"
+  }
+}
