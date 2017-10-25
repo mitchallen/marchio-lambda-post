@@ -66,7 +66,7 @@ describe('deployment smoke test', () => {
                 }
             };
 
-            var _postUrl = `${_testPath}/${_testModel.name}`;
+            var _postUrl = `${_testPath}`;
             // console.log(`POST URL: ${_postUrl}`);
 
             it('post should succeed', done => {
